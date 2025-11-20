@@ -47,7 +47,17 @@ function generate_nurses(n_nurses::Int; seed::Int=42)
 
     for i in 1:n_nurses
         name = rand(names) * " " * string(i)
-        skill = rand(SKILL_LEVELS)
+        
+        # Weighted skill distribution to ensure enough seniors
+        # 40% Senior, 35% Junior, 25% Trainee
+        r = rand()
+        if r < 0.40
+            skill = Senior
+        elseif r < 0.75
+            skill = Junior
+        else
+            skill = Trainee
+        end
         
         # Contract details based on skill
         if skill == Senior

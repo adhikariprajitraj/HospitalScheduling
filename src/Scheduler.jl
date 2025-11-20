@@ -91,7 +91,8 @@ function solve_schedule(nurses::Vector{Nurse}, shifts::Vector{Shift})
     # Actually, let's just use the raw min/max from the nurse struct as "Period Limits" for this assignment
     for n in 1:num_nurses
         total_hours = sum(x[n, s] * shifts[s].duration_hours for s in 1:num_shifts)
-        @constraint(model, total_hours >= nurses[n].contract_hours_min)
+        # Relaxed: Only enforce maximum hours, not minimum (to avoid infeasibility)
+        # @constraint(model, total_hours >= nurses[n].contract_hours_min)
         @constraint(model, total_hours <= nurses[n].contract_hours_max)
     end
 
